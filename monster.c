@@ -59,10 +59,14 @@ int move_mon(monster mon, DIRECTION dir, level map)
 			break;
 	}
 
-	if(!map->trees[y][x]) {
-		mon->x = x;
-		mon->y = y;
-	}
+	if(y < 0 || y >= map->height || x < 0 || x >= map->width)
+		return;
+
+	if(map->trees[y][x])
+		return;
+
+	mon->x = x;
+	mon->y = y;
 
 	return 0;
 }

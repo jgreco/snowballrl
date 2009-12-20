@@ -47,7 +47,7 @@ void trees(level map)
 
 	for(i=0; i<map->height; i++)
 	for(k=0; k<map->width; k++)
-		map->snow[i][k] = (range(0,20)==1);
+		map->trees[i][k] = (range(0,20)==1);
 
 	return;
 }
