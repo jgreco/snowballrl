@@ -2,7 +2,9 @@
 #define SNOWBALLRL_H_
 
 #include "monster.h"
+#include "level.h"
 
 monster player;
+level map;
 
 #endif

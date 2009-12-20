@@ -4,7 +4,7 @@
 typedef enum { UP, UPLEFT, LEFT, DOWNLEFT, DOWN, DOWNRIGHT, RIGHT, UPRIGHT } DIRECTION;
 
 #define KUP 'k'
-#define KDOWN 'k'
+#define KDOWN 'j'
 #define KLEFT 'h'
 #define KRIGHT 'l'
 #define KUPRIGHT 'u'
