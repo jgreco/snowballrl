@@ -28,42 +28,13 @@ int move_mon(monster mon, DIRECTION dir, level map)
 	x = mon->x;
 	y = mon->y;
 
-	switch(dir) {
-		case UP:
-			y--;
-			break;
-		case DOWN:
-			y++;
-			break;
-		case LEFT:
-			x--;
-			break;
-		case RIGHT:
-			x++;
-			break;
-		case UPLEFT:
-			y--;
-			x--;
-			break;
-		case UPRIGHT:
-			y--;
-			x++;
-			break;
-		case DOWNLEFT:
-			y++;
-			x--;
-			break;
-		case DOWNRIGHT:
-			y++;
-			x++;
-			break;
-	}
+	move_coord(&x, &y, dir);
 
 	if(y < 0 || y >= map->height || x < 0 || x >= map->width)
-		return;
+		return 0;
 
 	if(map->trees[y][x])
-		return;
+		return 0;
 
 	mon->x = x;
 	mon->y = y;

@@ -4,8 +4,12 @@
 
 #include "snowballrl.h"
 
+#define TREECOLOR 70
+#define PLAYERCOLOR COLOR_BLUE
+
 void ninterface();
 void draw();
+void collect_snow();
 
 int offset_x;
 int offset_y;
@@ -20,6 +24,20 @@ int main()
 	start_color();
 	use_default_colors();
 
+	init_pair(1, COLOR_BLUE, 144);//COLOR_BLACK);
+	init_pair(2, COLOR_BLUE, 186);//238);
+	init_pair(3, COLOR_BLUE, 187);//245);
+	init_pair(4, COLOR_BLUE, COLOR_WHITE);
+
+
+	init_pair(5, TREECOLOR, 144);//COLOR_BLACK);
+	init_pair(6, TREECOLOR, 186);//238);
+	init_pair(7, TREECOLOR, 187);//245);
+	init_pair(8, TREECOLOR, COLOR_WHITE);
+
+	init_pair(9, -1, COLOR_BLUE);
+	init_pair(10, -1, COLOR_RED);
+
 	assume_default_colors(COLOR_WHITE, COLOR_BLACK);
 
 	srand(time(NULL));
@@ -28,6 +46,8 @@ int main()
 	player = create_monster(PLAYER);
 	player->x = 500;
 	player->y = 500;
+	player->hp = 100;
+	snow_count = 10;
 
 	offset_x = 0;
 	offset_y = 0;
@@ -88,6 +108,10 @@ void ninterface()
 				offset_x = offset_x + 10;
 				break;
 
+			case ',':
+				collect_snow();
+				break;
+
 
 			case 'Q':
 				return;
@@ -100,6 +124,8 @@ void ninterface()
 void draw()
 {
 	int y, x;
+	int color;
+	void *dumb;
 
 	erase();
 
@@ -112,11 +138,60 @@ void draw()
 			|| y+offset_y < 0 || y+offset_y >= map->height)
 			continue;
 
-		if(map->trees[y+offset_y][x+offset_x])
+		color = map->snow[y+offset_y][x+offset_x] + 1;
+
+		if(map->trees[y+offset_y][x+offset_x]) {
 			mvprintw(y, x, "&");
+			mvchgat(y, x, 1, COLOR_PAIR(color+4) | A_BOLD, color+4, dumb);
+		} else
+			mvchgat(y, x, 1, COLOR_PAIR(color), color, dumb);
 	}
 
+	color = map->snow[player->y][player->x] + 1;
 	mvprintw(player->y-offset_y, player->x-offset_x, "@");
+	mvchgat(player->y-offset_y, player->x-offset_x, 1, COLOR_PAIR(color)|A_BOLD, color, dumb);
+
+	int snowbar = (double)(LINES+1) * ((double)snow_count / (double)100);
+	int hpbar = (double)(LINES+1) * ((double)player->hp / (double)100);
+
+	for(y=0; y<snowbar; y++) {
+		mvprintw(LINES-y, 0, " ");
+		mvchgat(LINES-y, 0, 1, COLOR_PAIR(9), 9, dumb);
+	}
+
+	for(y=0; y<hpbar; y++) {
+		mvprintw(LINES-y, 1, " ");
+		mvchgat(LINES-y, 1, 1, COLOR_PAIR(10), 10, dumb);
+	}
 
 	refresh();
+}
+
+void collect_snow()
+{
+	int i;
+	int x, y;
+	int collected = 0;
+
+	if(map->snow[player->y][player->x] > 0) {
+		map->snow[player->y][player->x]--;
+		collected++;
+	}
+
+	for(i=0; i<4; i++) {
+		x = player->x;
+		y = player->y;
+		move_coord(&x, &y, range(0, 9));
+		if(map->snow[y][x] > 0) {
+			map->snow[y][x]--;
+			collected++;
+		}
+	}
+
+	snow_count += collected;
+
+	if(snow_count > 100)
+		snow_count = 100;
+
+	return;
 }

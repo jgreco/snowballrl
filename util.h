@@ -13,5 +13,6 @@ typedef enum { UP, UPLEFT, LEFT, DOWNLEFT, DOWN, DOWNRIGHT, RIGHT, UPRIGHT } DIR
 #define KDOWNLEFT 'b'
 
 int range(int lower, int upper);
+void move_coord(int *x, int *y, DIRECTION dir);
 
 #endif

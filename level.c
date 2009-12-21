@@ -37,6 +37,7 @@ void snow(level map)
 	for(i=0; i<map->height; i++)
 	for(k=0; k<map->width; k++)
 		map->snow[i][k] = 3;
+//		map->snow[i][k] = range(0, 4);
 
 	return;
 }

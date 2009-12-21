@@ -6,5 +6,6 @@
 
 monster player;
 level map;
+int snow_count;
 
 #endif
