@@ -1,6 +1,6 @@
 CC = gcc
 #modify the CFLAGS variable as needed.  specifically you will probably need to modify the include directory arguments
-CFLAGS = -O2 -Wall -Wextra -Wno-unused-parameter -pedantic -pipe
+CFLAGS = -O2 -Wall -Wextra -Wno-unused-parameter -pedantic -pipe -g
 LIBS = -lncurses
 OBJDIR = .build
 OBJECTS = main.o level.o monster.o util.o
