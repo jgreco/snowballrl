@@ -42,9 +42,9 @@ void snow(level map)
 	noise_sizes = (int* )malloc(sizeof(int) * num);
 
 	noise_sizes[0] = map->height / 20;
-	noise_sizes[1] = map->height / 10;
-	noise_sizes[2] = map->height / 3;
-	noise_sizes[3] = map->height / 2;
+	noise_sizes[1] = map->height / 15;
+	noise_sizes[2] = map->height / 10;
+	noise_sizes[3] = map->height / 5;
 //	noise_sizes[4] = map->height / 2;
 
 	for(k=0; k<num; k++) {
@@ -93,6 +93,8 @@ void snow(level map)
 		}
 
 		map->snow[y][x] = (temp/num) * 5.0;
+		if(map->snow[y][x] > 3)
+			map->snow[y][x] = 3;
 	}
 	}
 
