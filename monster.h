@@ -8,6 +8,8 @@ typedef enum { PLAYER, SLIZARD, SMAN } MON_TYPE;
 
 typedef struct monster_str {
 	MON_TYPE type;
+	char symbol;
+	short hidden;
 
 	int hp;
 	int x, y;
@@ -16,5 +18,6 @@ typedef struct monster_str {
 monster create_rand_mon();
 monster create_monster(MON_TYPE type);
 int move_mon(monster mon, DIRECTION dir, level map);
+void ai(monster mon);
 
 #endif

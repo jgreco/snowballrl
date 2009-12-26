@@ -1,9 +1,9 @@
 CC = gcc
 #modify the CFLAGS variable as needed.  specifically you will probably need to modify the include directory arguments
 CFLAGS = -O2 -Wall -Wextra -Wno-unused-parameter -pedantic -pipe -g
-LIBS = -lncurses
+LIBS = -lncurses -lm
 OBJDIR = .build
-OBJECTS = main.o level.o monster.o util.o
+OBJECTS = main.o level.o monster.o util.o arraylist.o
 OBJECTS :=  $(addprefix ${OBJDIR}/,${OBJECTS})
 
 snowballrl: $(OBJECTS)

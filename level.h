@@ -11,5 +11,6 @@ typedef struct level_str {
 } *level;
 
 level make_level(int height, int width);
+void pop_monsters(level map);
 
 #endif

@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
+#include "monster.h"
+#include "snowballrl.h"
 
 void snow(level map);
 void trees(level map);
@@ -27,8 +29,29 @@ level make_level(int height, int width)
 
 	snow(new);
 	trees(new);
+	pop_monsters(new);
 
 	return new;
+}
+
+void pop_monsters(level map)
+{
+	int i;
+	int area = map->height * map->width;
+
+	int num_monsts = 0.03 * area;
+
+	monsters = al_makenull(NULL);
+
+	for(i=0; i<num_monsts; i++) {
+		monster new = create_rand_mon();
+		al_insert(new, al_first(monsters), monsters);
+
+		new->x = range(0, map->width);
+		new->y = range(0, map->height);
+	}
+
+	return;
 }
 
 void snow(level map)

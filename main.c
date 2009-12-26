@@ -3,6 +3,7 @@
 #include <time.h>
 
 #include "snowballrl.h"
+#include "arraylist.h"
 
 #define TREECOLOR 70
 #define PLAYERCOLOR COLOR_BLUE
@@ -24,15 +25,15 @@ int main()
 	start_color();
 	use_default_colors();
 
-	init_pair(1, COLOR_BLUE, 144);//COLOR_BLACK);
-	init_pair(2, COLOR_BLUE, 186);//238);
-	init_pair(3, COLOR_BLUE, 187);//245);
+	init_pair(1, COLOR_BLUE, 144);/*COLOR_BLACK); */
+	init_pair(2, COLOR_BLUE, 186);/*238); */
+	init_pair(3, COLOR_BLUE, 187);/*245); */
 	init_pair(4, COLOR_BLUE, COLOR_WHITE);
 
 
-	init_pair(5, TREECOLOR, 144);//COLOR_BLACK);
-	init_pair(6, TREECOLOR, 186);//238);
-	init_pair(7, TREECOLOR, 187);//245);
+	init_pair(5, TREECOLOR, 144);/*COLOR_BLACK); */
+	init_pair(6, TREECOLOR, 186);/*238); */
+	init_pair(7, TREECOLOR, 187);/*245); */
 	init_pair(8, TREECOLOR, COLOR_WHITE);
 
 	init_pair(9, -1, COLOR_BLUE);
@@ -51,6 +52,8 @@ int main()
 
 	offset_x = 0;
 	offset_y = 0;
+
+	messages = al_makenull(NULL);
 
 	ninterface();
 
@@ -112,6 +115,9 @@ void ninterface()
 				collect_snow();
 				break;
 
+			case ' ':
+				break;
+
 
 			case 'Q':
 				return;
@@ -126,6 +132,7 @@ void draw()
 	int y, x;
 	int color;
 	void *dumb;
+	int snowbar, hpbar;
 
 	erase();
 
@@ -151,8 +158,24 @@ void draw()
 	mvprintw(player->y-offset_y, player->x-offset_x, "@");
 	mvchgat(player->y-offset_y, player->x-offset_x, 1, COLOR_PAIR(color)|A_BOLD, color, dumb);
 
-	int snowbar = (double)(LINES+1) * ((double)snow_count / (double)100);
-	int hpbar = (double)(LINES+1) * ((double)player->hp / (double)100);
+
+	for(x = al_first(monsters); x != al_end(monsters); x = al_next(x, monsters)) {
+		monster curr = (monster)al_retrieve(x, monsters);
+		ai(curr);
+
+		if(curr->hidden)
+			continue;
+
+		color = map->snow[curr->y][curr->x] + 1;
+
+		mvprintw(curr->y-offset_y, curr->x-offset_x, "%c", curr->symbol);
+		mvchgat(curr->y-offset_y, curr->x-offset_x, 1, COLOR_PAIR(color)|A_BOLD, color, dumb);
+	}
+
+
+
+	snowbar = (double)(LINES+1) * ((double)snow_count / (double)100);
+	hpbar = (double)(LINES+1) * ((double)player->hp / (double)100);
 
 	for(y=0; y<snowbar; y++) {
 		mvprintw(LINES-y, 0, " ");
@@ -162,6 +185,13 @@ void draw()
 	for(y=0; y<hpbar; y++) {
 		mvprintw(LINES-y, 1, " ");
 		mvchgat(LINES-y, 1, 1, COLOR_PAIR(10), 10, dumb);
+	}
+
+	while(!al_empty(messages)) {
+		mvprintw(0, 2, "%s", al_retrieve(al_first(messages),messages));
+		al_delete(al_first(messages), messages);
+		if(!al_empty(messages))
+			getch();
 	}
 
 	refresh();
